@@ -1,4 +1,4 @@
-package com.lesson2;
+package com.lesson2.part1;
 
 import java.util.Map;
 
