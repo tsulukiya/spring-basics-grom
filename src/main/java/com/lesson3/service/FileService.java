@@ -1,29 +1,13 @@
 package com.lesson3.service;
 
 import com.lesson3.model.File;
-import com.lesson3.repository.IFileDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class FileService implements IFileService {
-    @Autowired
-    private IFileDAO iFileDAO;
-    @Override
-    public File save(File file) {
-        return iFileDAO.save(file);
-    }
+public interface FileService {
+    File save(File file);
 
-    @Override
-    public File update(File file) {
-        return iFileDAO.update(file);
-    }
+    File update(File file);
 
-    @Override
-    public File delete(long id) {
-        return iFileDAO.delete(id);
-    }
+    File delete(long id);
 
-    @Override
-    public File findById(long id) {
-        return iFileDAO.findById(id);
-    }
+    File findById(long id);
 }

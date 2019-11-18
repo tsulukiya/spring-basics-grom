@@ -17,11 +17,11 @@
     <bean id="itemService" class="com.lesson2.part2.ItemService.ItemService"> </bean>
     <bean id="itemController" class="com.lesson2.part2.ItemController.ItemController"> </bean>
 
-    <bean id="file" class="com.lesson3.model.File" abstract="true"> </bean>
-    <bean id="storage" class="com.lesson3.model.Storage" abstract="true"> </bean>
-    <bean id="fileDAO" class="com.lesson3.repository.FileDAO"> </bean>
-    <bean id="storageDAO" class="com.lesson3.repository.StorageDAO"> </bean>
-    <bean id="fileService" class="com.lesson3.service.FileService"> </bean>
+    <bean id="file" class="com.lesson3.model.File"> </bean>
+    <bean id="storage" class="com.lesson3.model.Storage"> </bean>
+    <bean id="fileDAO" class="com.lesson3.repository.FileDAOImpl"> </bean>
+    <bean id="storageDAO" class="com.lesson3.repository.StorageDAOImpl"> </bean>
+    <bean id="fileService" class="com.lesson3.service.FileServiceImpl"> </bean>
     <bean id="storageService" class="com.lesson3.service.StorageService"> </bean>
 
 </beans>
