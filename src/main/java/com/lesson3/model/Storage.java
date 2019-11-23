@@ -1,12 +1,21 @@
 package com.lesson3.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.util.Arrays;
 
+@Entity
+@Table(name = "STORAGE_ONE")
 public class Storage {
+    @JsonProperty("id")
     private long id;
-    private String[] formatsSupported;
+    @JsonProperty("formatSupported")
+    private String formatsSupported;
+    @JsonProperty("storageCountry")
     private String storageCountry;
+    @JsonProperty("storageSize")
     private long storageSize;
 
 
@@ -16,6 +25,7 @@ public class Storage {
     public Storage(long id) {
         this.id = id;
     }
+
 
     @Id
     @SequenceGenerator(name = "PR_SEQ", sequenceName = "PRODUCT_SEQ", allocationSize = 1)
@@ -30,11 +40,11 @@ public class Storage {
     }
 
     @Column(name = "FORMAT_SUPPORTED")
-    public String[] getFormatsSupported() {
+    public String getFormatsSupported() {
         return formatsSupported;
     }
 
-    public void setFormatsSupported(String[] formatsSupported) {
+    public void setFormatsSupported(String formatsSupported) {
         this.formatsSupported = formatsSupported;
     }
 
@@ -60,7 +70,7 @@ public class Storage {
     public String toString() {
         return "Storage{" +
                 "id=" + id +
-                ", formatsSupported=" + Arrays.toString(formatsSupported) +
+                ", formatsSupported='" + formatsSupported + '\'' +
                 ", storageCountry='" + storageCountry + '\'' +
                 ", storageSize=" + storageSize +
                 '}';

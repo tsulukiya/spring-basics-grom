@@ -1,14 +1,22 @@
 package com.lesson3.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "FILE_ONE")
 public class File {
+    @JsonProperty("id")
     private long id;
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("format")
     private String format;
+    @JsonProperty("size")
     private long size;
+    @JsonProperty("storage")
     private Storage storage;
 
     public File() {
