@@ -132,7 +132,8 @@ public class FileDAOImpl implements FileDAO {
 
     @Override
     public File put(Storage storage, File file) {
-        file.setStorage(storage);
+        file = findById(file.getId());
+        file.setStorage(new Storage(storage.getId()));
         update(file);
         return file;
     }

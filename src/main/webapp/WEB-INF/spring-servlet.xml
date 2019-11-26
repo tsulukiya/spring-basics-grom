@@ -19,8 +19,8 @@
     <bean id="itemService" class="com.lesson2.part2.ItemService.ItemService"> </bean>
     <bean id="itemController" class="com.lesson2.part2.ItemController.ItemController"> </bean>
 
-<!--    <bean id="file" class="com.lesson3.model.File"> </bean>-->
-<!--    <bean id="storage" class="com.lesson3.model.Storage"> </bean>-->
+    <bean id="file" class="com.lesson3.model.File"> </bean>
+    <bean id="storage" class="com.lesson3.model.Storage"> </bean>
     <bean id="fileDAO" class="com.lesson3.repository.FileDAOImpl"> </bean>
     <bean id="storageDAO" class="com.lesson3.repository.StorageDAOImpl"> </bean>
     <bean id="fileService" class="com.lesson3.service.FileServiceImpl"> </bean>
