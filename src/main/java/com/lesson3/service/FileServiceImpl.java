@@ -5,7 +5,9 @@ import com.lesson3.model.Storage;
 import com.lesson3.repository.FileDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.IllegalFormatException;
 import java.util.List;
+import java.util.Set;
 
 
 public class FileServiceImpl implements FileService {
@@ -34,6 +36,8 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File put(Storage storage, File file) {
+        fileDAO.checkFormatSupported(file, storage);
+        fileDAO.checkMaxSize(file, storage);
         return fileDAO.put(storage, file);
     }
 
@@ -51,6 +55,7 @@ public class FileServiceImpl implements FileService {
     public File transferFile(Storage storageFrom, Storage storageTo, long id) {
         return fileDAO.transferFile(storageFrom, storageTo, id);
     }
+
 
 
 }

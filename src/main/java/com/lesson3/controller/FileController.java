@@ -1,15 +1,25 @@
 package com.lesson3.controller;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.lesson3.model.File;
 import com.lesson3.model.Storage;
 import com.lesson3.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.HttpServletBean;
 
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class FileController {
@@ -29,8 +39,9 @@ public class FileController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteFile", produces = "application/json")
-    public @ResponseBody File delete(long id) {
-       return fileService.delete(id);
+    public @ResponseBody
+    File delete(long id) {
+        return fileService.delete(id);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/findFile", produces = "application/json")
@@ -41,25 +52,33 @@ public class FileController {
 
     @RequestMapping(method = RequestMethod.PUT, value = "/putFileToStorage", produces = "application/json")
     public @ResponseBody
-    File put(Storage storage, File file) {
+    File put(long idStorage, long idFile) {
+        File file = new File(idFile);
+        Storage storage = new Storage(idStorage);
         return fileService.put(storage, file);
     }
 
     @RequestMapping(method = RequestMethod.DELETE, value = "/deleteFileFromStorage", produces = "application/json")
     public @ResponseBody
-    File delete(Storage storage, File file) {
+    File delete(long idStorage, long idFile) {
+        File file = new File(idFile);
+        Storage storage = new Storage(idStorage);
         return fileService.delete(storage, file);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/transferAllFiles", produces = "application/json")
     public @ResponseBody
-    List<File> transferAll(Storage storageFrom, Storage storageTo) {
+    List <File> transferAll(long idStorageFrom, long idStorageTo) {
+        Storage storageFrom = new Storage(idStorageFrom);
+        Storage storageTo = new Storage(idStorageTo);
         return fileService.transferAll(storageFrom, storageTo);
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "/transferFile", produces = "application/json")
     public @ResponseBody
-    File transferFile(Storage storageFrom, Storage storageTo, long id) {
+    File transferFile(long idStorageFrom, long idStorageTo, long id) {
+        Storage storageFrom = new Storage(idStorageFrom);
+        Storage storageTo = new Storage(idStorageTo);
         return fileService.transferFile(storageFrom, storageTo, id);
     }
 }

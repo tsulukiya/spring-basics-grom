@@ -8,15 +8,19 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.naming.SizeLimitExceededException;
+import java.io.IOException;
+import java.util.*;
 
 
 public class FileDAOImpl implements FileDAO {
     private static SessionFactory sessionFactory;
     private String sqlQueryFindById = "from File where id =:code";
     private String sqlQueryFindAllFileFromStorage = "from File where storage =:code";
+    @Autowired
+    private StorageDAO storageDAO;
 
 
     @Override
@@ -104,20 +108,15 @@ public class FileDAOImpl implements FileDAO {
 
     @Override
     public File findById(long id) {
-
         Session session = null;
-        Transaction tr;
         File file = null;
         try {
             session = createSessionFactory().openSession();
-            tr = session.getTransaction();
-            tr.begin();
             Query query = session.createQuery(sqlQueryFindById);
             query.setParameter("code", id);
             for (Object o : query.list()) {
                 file = (File) o;
             }
-            tr.commit();
             return file;
         } catch (HibernateException e) {
             System.err.println("Find by is failed");
@@ -133,13 +132,14 @@ public class FileDAOImpl implements FileDAO {
     @Override
     public File put(Storage storage, File file) {
         file = findById(file.getId());
-        file.setStorage(new Storage(storage.getId()));
+        file.setStorage(storageDAO.findById(storage.getId()));
         update(file);
         return file;
     }
 
     @Override
     public File delete(Storage storage, File file) {
+        file = findById(file.getId());
         file.setStorage(null);
         update(file);
         return file;
@@ -148,22 +148,19 @@ public class FileDAOImpl implements FileDAO {
     @Override
     public List<File> transferAll(Storage storageFrom, Storage storageTo) {
         Session session = null;
-        Transaction tr;
+        storageFrom = storageDAO.findById(storageFrom.getId());
         List<File> fileList = new ArrayList<>();
         try {
             session = createSessionFactory().openSession();
-            tr = session.getTransaction();
-            tr.begin();
             Query query = session.createQuery(sqlQueryFindAllFileFromStorage);
             query.setParameter("code", storageFrom);
             for (Object o : query.list()) {
                 fileList.add((File) o);
             }
             for (File file : fileList) {
-                file.setStorage(storageTo);
+                file.setStorage(storageDAO.findById(storageTo.getId()));
                 update(file);
             }
-            tr.commit();
             return fileList;
 
         } catch (HibernateException e) {
@@ -192,5 +189,60 @@ public class FileDAOImpl implements FileDAO {
             sessionFactory = new Configuration().configure().buildSessionFactory();
         }
         return sessionFactory;
+    }
+
+    @Override
+    public void checkFormatSupported(File file, Storage storage) {
+        file = findById(file.getId());
+        storage = storageDAO.findById(storage.getId());
+        int count = 0;
+        String[] masFormat = storage.getFormatsSupported().split(",");
+        for (String s : masFormat) {
+            if (s.equals(file.getFormat()))
+                count++;
+        }
+        if (count > 0) {
+            System.out.println("Storage is supported format this file...");
+        } else {
+            throw new IllegalArgumentException("Storage" + storage + "is not supported format this file...");
+        }
+    }
+
+    @Override
+    public void checkMaxSize(File file, Storage storage) {
+        file = findById(file.getId());
+        storage = storageDAO.findById(storage.getId());
+        long fileSize = file.getSize();
+        long storageSize = storage.getStorageSize();
+        long sizeFileFromStorage = 0;
+
+        Session session = null;
+        List<File> fileList = new ArrayList<>();
+        try {
+            session = createSessionFactory().openSession();
+            Query query = session.createQuery(sqlQueryFindAllFileFromStorage);
+            query.setParameter("code", storage);
+            for (Object o : query.list()) {
+                fileList.add((File) o);
+            }
+
+            for (File file1 : fileList) {
+                sizeFileFromStorage += file1.getSize();
+            }
+
+            if ((storageSize - sizeFileFromStorage) < fileSize) {
+                throw new IllegalArgumentException("Size this file is very big for this storage");
+            }
+
+        } catch (HibernateException e) {
+            System.err.println("TransferAll is failed");
+            System.err.println(e.getMessage());
+            throw e;
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+
     }
 }

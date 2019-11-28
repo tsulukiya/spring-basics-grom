@@ -4,8 +4,9 @@ import com.lesson3.model.File;
 import com.lesson3.model.Storage;
 
 import java.util.List;
+import java.util.Set;
 
-public interface FileDAO {
+public interface FileDAO extends Check {
 
     File save(File file);
 

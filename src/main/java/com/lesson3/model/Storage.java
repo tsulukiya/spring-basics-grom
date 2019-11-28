@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.util.Arrays;
+import java.util.Objects;
 
 @Entity
 @Table(name = "STORAGE_ONE")
