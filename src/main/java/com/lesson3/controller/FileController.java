@@ -1,30 +1,25 @@
 package com.lesson3.controller;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.lesson3.model.File;
 import com.lesson3.model.Storage;
 import com.lesson3.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.client.support.HttpRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.HttpServletBean;
+
 
 import java.util.List;
-import java.util.Set;
 
 @Controller
 public class FileController {
-    @Autowired
     private FileService fileService;
+
+    @Autowired
+    public FileController(FileService fileService) {
+        this.fileService = fileService;
+    }
 
     @RequestMapping(method = RequestMethod.POST, value = "/saveFile", produces = "application/json")
     public @ResponseBody

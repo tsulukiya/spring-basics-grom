@@ -3,16 +3,22 @@ package com.lesson3.service;
 import com.lesson3.model.File;
 import com.lesson3.model.Storage;
 import com.lesson3.repository.FileDAO;
+import com.lesson3.repository.FileDAOImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Set;
 
-
+@Service
 public class FileServiceImpl implements FileService {
-    @Autowired
     private FileDAO fileDAO;
+
+    @Autowired
+    public FileServiceImpl(FileDAO fileDAO) {
+        this.fileDAO = fileDAO;
+    }
 
     @Override
     public File save(File file) {

@@ -9,19 +9,24 @@ import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.naming.SizeLimitExceededException;
 import java.io.IOException;
 import java.util.*;
 
 
+@Repository
 public class FileDAOImpl implements FileDAO {
     private static SessionFactory sessionFactory;
-    private String sqlQueryFindById = "from File where id =:code";
-    private String sqlQueryFindAllFileFromStorage = "from File where storage =:code";
-    @Autowired
+    private static final String sqlQueryFindById = "from File where id =:code";
+    private static final String sqlQueryFindAllFileFromStorage = "from File where storage =:code";
     private StorageDAO storageDAO;
 
+    @Autowired
+    public FileDAOImpl(StorageDAO storageDAO) {
+        this.storageDAO = storageDAO;
+    }
 
     @Override
     public File save(File file) {
