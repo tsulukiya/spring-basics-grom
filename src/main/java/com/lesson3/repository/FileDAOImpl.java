@@ -18,7 +18,8 @@ import java.util.*;
 
 @Repository
 public class FileDAOImpl implements FileDAO {
-    private static SessionFactory sessionFactory;
+    @Autowired
+    SessionFactory sessionFactory;
     private static final String sqlQueryFindById = "from File where id =:code";
     private static final String sqlQueryFindAllFileFromStorage = "from File where storage =:code";
     private StorageDAO storageDAO;
@@ -34,7 +35,7 @@ public class FileDAOImpl implements FileDAO {
         Session session = null;
 
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.getTransaction();
             transaction.begin();
             session.save(file);
@@ -62,7 +63,7 @@ public class FileDAOImpl implements FileDAO {
         Session session = null;
 
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.getTransaction();
             transaction.begin();
             session.update(file);
@@ -89,7 +90,7 @@ public class FileDAOImpl implements FileDAO {
         Session session = null;
         Transaction tr = null;
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tr = session.getTransaction();
             tr.begin();
             File file = findById(id);
@@ -116,7 +117,7 @@ public class FileDAOImpl implements FileDAO {
         Session session = null;
         File file = null;
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             Query query = session.createQuery(sqlQueryFindById);
             query.setParameter("code", id);
             for (Object o : query.list()) {
@@ -156,7 +157,7 @@ public class FileDAOImpl implements FileDAO {
         storageFrom = storageDAO.findById(storageFrom.getId());
         List<File> fileList = new ArrayList<>();
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             Query query = session.createQuery(sqlQueryFindAllFileFromStorage);
             query.setParameter("code", storageFrom);
             for (Object o : query.list()) {
@@ -189,12 +190,12 @@ public class FileDAOImpl implements FileDAO {
         return file;
     }
 
-    public static SessionFactory createSessionFactory() {
-        if (sessionFactory == null) {
-            sessionFactory = new Configuration().configure().buildSessionFactory();
-        }
-        return sessionFactory;
-    }
+//    public static SessionFactory createSessionFactory() {
+//        if (sessionFactory == null) {
+//            sessionFactory = new Configuration().configure().buildSessionFactory();
+//        }
+//        return sessionFactory;
+//    }
 
     @Override
     public void checkFormatSupported(File file, Storage storage) {
@@ -224,7 +225,7 @@ public class FileDAOImpl implements FileDAO {
         Session session = null;
         List<File> fileList = new ArrayList<>();
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             Query query = session.createQuery(sqlQueryFindAllFileFromStorage);
             query.setParameter("code", storage);
             for (Object o : query.list()) {

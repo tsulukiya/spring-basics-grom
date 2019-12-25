@@ -8,11 +8,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 public class StorageDAOImpl implements StorageDAO {
-    private static SessionFactory sessionFactory;
+    @Autowired
+    SessionFactory sessionFactory;
     public String sqlQueryFindById = "from Storage where id =:code";
 
     @Override
@@ -21,7 +24,7 @@ public class StorageDAOImpl implements StorageDAO {
         Session session = null;
 
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.getTransaction();
             transaction.begin();
             session.save(storage);
@@ -49,7 +52,7 @@ public class StorageDAOImpl implements StorageDAO {
         Session session = null;
 
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             transaction = session.getTransaction();
             transaction.begin();
             session.update(storage);
@@ -76,7 +79,7 @@ public class StorageDAOImpl implements StorageDAO {
         Session session = null;
         Transaction tr = null;
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tr = session.getTransaction();
             tr.begin();
             Storage storage = findById(id);
@@ -104,7 +107,7 @@ public class StorageDAOImpl implements StorageDAO {
         Transaction tr;
         Storage storage = null;
         try {
-            session = createSessionFactory().openSession();
+            session = sessionFactory.openSession();
             tr = session.getTransaction();
             tr.begin();
             Query query = session.createQuery(sqlQueryFindById);
@@ -125,10 +128,10 @@ public class StorageDAOImpl implements StorageDAO {
         }
     }
 
-    public static SessionFactory createSessionFactory() {
-        if (sessionFactory == null) {
-            sessionFactory = new Configuration().configure().buildSessionFactory();
-        }
-        return sessionFactory;
-    }
+//    public static SessionFactory createSessionFactory() {
+//        if (sessionFactory == null) {
+//            sessionFactory = new Configuration().configure().buildSessionFactory();
+//        }
+//        return sessionFactory;
+//    }
 }

@@ -69,7 +69,7 @@ public class File {
         this.size = size;
     }
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "STORAGE_ONE")
     public Storage getStorage() {
         return storage;

@@ -54,9 +54,9 @@ public class SpringConfig {
     public Properties hibernateProperties(){
         return new Properties() {
             {
-                setProperty("hibernate.hbm2ddl.auto", "update");
-                setProperty("hibernate.dialect", "org.hibernate.dialect.Oracle9iDialect");
-                setProperty("hibernate.showSql", "true");
+                //setProperty("hibernate.hbm2ddl.auto", "update");
+                //setProperty("hibernate.dialect", "org.hibernate.dialect.OracleDialect");
+                setProperty("hibernate.show_sql", "true");
             }
 
         };
