@@ -157,10 +157,10 @@ public class SpringConfig {
         return new Storage();
     }
 
-//    @Bean(name = "fileDao")
-//    public FileDAO fileDAO(StorageDAO storageDAO) {
-//        return new FileDAOImpl(storageDAO);
-//    }
+    @Bean(name = "fileDao")
+    public FileDAO fileDAO(StorageDAO storageDAO) {
+        return new FileDAOImpl(storageDAO);
+    }
 
     @Bean(name = "storageDao")
     public StorageDAO storageDAO() {
